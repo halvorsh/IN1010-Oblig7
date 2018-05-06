@@ -7,8 +7,8 @@ public abstract class Rute {
     protected Rute nord, ost, sor, vest;
     protected Rute[] naboer;
 
-    protected ArrayList<ArrayList<Rute>> utveier;
-    protected ArrayList<Rute> kortesteUtvei;
+    protected ArrayList<String> utveier;
+    protected String kortesteUtvei;
 
     public Rute(int rad, int kolonne){
         radPosisjon = rad;

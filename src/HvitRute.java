@@ -11,17 +11,28 @@ public class HvitRute extends Rute{
     }
 
     public void settUtveier(){
-        utveier = finnUtveier("Ingen", new ArrayList <>());
+        ArrayList<ArrayList<Rute>> ruteUtveier = finnUtveier("Ingen", new ArrayList <>());
+        ArrayList<Rute> kortesteRuteUtvei = null;
 
-        if(utveier != null){
-            for(ArrayList<Rute> utvei : utveier){
-                if(kortesteUtvei == null){
-                    kortesteUtvei = utvei;
-                }else if(utvei.size() < kortesteUtvei.size()){
-                    kortesteUtvei = utvei;
+        if(ruteUtveier != null){
+            utveier = new ArrayList <>();
+            for(ArrayList<Rute> utvei : ruteUtveier){
+                String konvertertUtvei = ""+utvei.get(0);
+                for(int i = 1; i < utvei.size(); i++){
+                    konvertertUtvei += " --> " + utvei.get(i);
+                }
+                utveier.add(konvertertUtvei);
+
+                if(kortesteRuteUtvei == null){
+                    kortesteRuteUtvei = utvei;
+                    kortesteUtvei = konvertertUtvei;
+                }else if(utvei.size() < kortesteRuteUtvei.size()){
+                    kortesteRuteUtvei = utvei;
+                    kortesteUtvei = konvertertUtvei;
                 }
             }
         }
+
     }
 
     public ArrayList <ArrayList<Rute>> finnUtveier(String forrigeRetning, ArrayList<Rute> besokteRuter) {
