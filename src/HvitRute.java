@@ -15,20 +15,23 @@ public class HvitRute extends Rute{
         ArrayList<Rute> kortesteRuteUtvei = null;
 
         if(ruteUtveier != null){
-            utveier = new ArrayList <>();
+            utveier = new Lenkeliste <>();
             for(ArrayList<Rute> utvei : ruteUtveier){
                 String konvertertUtvei = ""+utvei.get(0);
                 for(int i = 1; i < utvei.size(); i++){
                     konvertertUtvei += " --> " + utvei.get(i);
                 }
-                utveier.add(konvertertUtvei);
 
                 if(kortesteRuteUtvei == null){
                     kortesteRuteUtvei = utvei;
                     kortesteUtvei = konvertertUtvei;
+                    utveier.leggTil(0, konvertertUtvei);
                 }else if(utvei.size() < kortesteRuteUtvei.size()){
                     kortesteRuteUtvei = utvei;
                     kortesteUtvei = konvertertUtvei;
+                    utveier.leggTil(0, konvertertUtvei);
+                }else{
+                    utveier.leggTil(konvertertUtvei);
                 }
             }
         }

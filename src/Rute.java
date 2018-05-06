@@ -7,7 +7,7 @@ public abstract class Rute {
     protected Rute nord, ost, sor, vest;
     protected Rute[] naboer;
 
-    protected ArrayList<String> utveier;
+    protected Lenkeliste<String> utveier;
     protected String kortesteUtvei;
 
     public Rute(int rad, int kolonne){

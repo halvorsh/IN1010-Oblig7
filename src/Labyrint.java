@@ -104,17 +104,7 @@ public class Labyrint {
     public Liste<String> finnUtveiFra(int startKol, int startRad){
         Rute startRute = brett[startRad][startKol];
 
-        Liste<String> utvei = new Lenkeliste <>();
-
-        System.out.println("Det er " + startRute.utveier.size() + " utvei(er) fra dette punktet.\nDen korteste er:");
-
-        if(startRute.kortesteUtvei != null){
-            for(Rute rute : startRute.kortesteUtvei){
-                utvei.leggTil(rute.toString());
-            }
-        }
-
-        return utvei;
+        return startRute.utveier;
     }
 
     @Override
@@ -129,5 +119,17 @@ public class Labyrint {
         }
 
         return output;
+    }
+
+    public static int getRader() {
+        return rader;
+    }
+
+    public static int getKolonner() {
+        return kolonner;
+    }
+
+    public Rute[][] getBrett() {
+        return brett;
     }
 }
