@@ -21,6 +21,12 @@ public class LabyrintProgram extends Application {
     private GridPane gridPane = new GridPane();
     private static final int MINTILESIZE = 1;
 
+    private Stage stage;
+
+    private LabyrintKnapp valgtKnapp = null;
+    private int utveiCounter = 0;
+    private Liste<String> utveier = null;
+
     class LabyrintKnapp extends Button{
         int x, y;
 
@@ -33,18 +39,35 @@ public class LabyrintProgram extends Application {
     class Klikkbehandler implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-            LabyrintKnapp knapp = (LabyrintKnapp) event.getSource();
-            Liste<String> utveier = labyrint.finnUtveiFra(knapp.y, knapp.x);
+            LabyrintKnapp nyKnapp = (LabyrintKnapp) event.getSource();
+            if(!event.getSource().equals(valgtKnapp)) {
+                valgtKnapp = nyKnapp;
+                utveiCounter = 0;
+                utveier = labyrint.finnUtveiFra(valgtKnapp.y, valgtKnapp.x);
+            }else{
+                utveiCounter++;
+                if(utveier != null) {
+                    if (utveiCounter >= utveier.stoerrelse()) {
+                        utveiCounter = 0;
+                    }
+                }
+            }
             ObservableList<Node> labyrintKnapper = gridPane.getChildren();
+            if(utveier != null) {
+                stage.setTitle((utveiCounter + 1) + " av " + utveier.stoerrelse() + " løsning(er)");
+            }else{
+                stage.setTitle("Ingen utveier");
+            }
+
 
             if(utveier != null) {
-                boolean[][] losning = losningStringTilTabell(utveier.hent(0), kolonner, rader);
+                boolean[][] losning = losningStringTilTabell(utveier.hent(utveiCounter), kolonner, rader);
 
                 for (int i = 0; i < rader; i++) {
                     for (int j = 0; j < kolonner; j++) {
                         LabyrintKnapp k = (LabyrintKnapp) labyrintKnapper.get(i*kolonner+j);
                         if (losning[i][j]) {
-                            k.setStyle("-fx-background-color: #00FF00;");
+                            k.setStyle("-fx-background-color: #009900;");
                         } else {
                             if(brett[i][j].charTilTegn().equals("#")) {
                                 k.setStyle("-fx-background-color: #000000;");
@@ -75,6 +98,7 @@ public class LabyrintProgram extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        stage = primaryStage;
         try {
             labyrint = Labyrint.lesFraFil(fileChooser.showOpenDialog(primaryStage));
         } catch (FileNotFoundException e) {
@@ -84,6 +108,10 @@ public class LabyrintProgram extends Application {
         rader = labyrint.getRader();
         kolonner = labyrint.getKolonner();
 
+        int knappStoerrelse = 750/rader;
+
+        gridPane.setPrefSize(kolonner*knappStoerrelse, 750);
+
         brett = labyrint.getBrett();
 
         for(int i = 0; i < rader; i++){
@@ -91,7 +119,7 @@ public class LabyrintProgram extends Application {
                 Rute gjeldeneRute = brett[i][j];
                 LabyrintKnapp knapp = new LabyrintKnapp(i,j);
                 knapp.setMinSize(1, 1);
-                knapp.setPrefSize(40, 40);
+                knapp.setPrefSize(knappStoerrelse, knappStoerrelse);
                 if(gjeldeneRute.charTilTegn().equals("#")){
                     knapp.setStyle("-fx-background-color: #000000;");
                 }else{
